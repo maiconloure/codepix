@@ -1,15 +1,17 @@
 package model
 
 import (
+	"errors"
+	"time"
+
 	"github.com/asaskevich/govalidator"
 	uuid "github.com/satori/go.uuid"
-	"time"
 )
 
 const (
-	TransactionPending string = "pending"
+	TransactionPending   string = "pending"
 	TransactionCompleted string = "completed"
-	TransactionError string = "error"
+	TransactionError     string = "error"
 	TransactionConfirmed string = "confirmed"
 )
 
@@ -24,28 +26,28 @@ type Transactions struct {
 }
 
 type Transaction struct {
-	Base              `valid: "required"`
-	AccountFrom       *Account `valid: "-"`
-	Amount            float64  `json:"amount" valid:"notnull`
-	PixKeyTo          *PixKey  `valid: "-"`
-	Status            string   `json:"status" valid:"notnull`
-	Description       string   `json:"description" valid:"notnull`
-	CancelDescription string   `json:"cancel_description" valid: "-"`
+	Base              `valid:"required"`
+	AccountFrom       *Account `valid:"-"`
+	Amount            float64  `json:"amount" valid:"notnull"`
+	PixKeyTo          *PixKey  `valid:"-"`
+	Status            string   `json:"status" valid:"notnull"`
+	Description       string   `json:"description" valid:"notnull"`
+	CancelDescription string   `json:"cancel_description" valid:"-"`
 }
 
 func (transaction *Transaction) isValid() error {
 	_, err := govalidator.ValidateStruct(transaction)
 
 	if transaction.Amount <= 0 {
-		return errors.New(text: "the amount must be greater than 0")
+		return errors.New("the amount must be greater than 0")
 	}
 
 	if transaction.Status != TransactionPending && transaction.Status != TransactionCompleted && transaction.Status != TransactionError {
-		return errors.New(text: "invalid status for the transaction.")
+		return errors.New("invalid status for the transaction.")
 	}
 
 	if transaction.PixKeyTo.AccountID == transaction.AccountFrom.ID {
-		return errors.New(text: "the source and destination account cannot be the same.")
+		return errors.New("the source and destination account cannot be the same.")
 	}
 
 	if err != nil {
@@ -54,13 +56,13 @@ func (transaction *Transaction) isValid() error {
 	return nil
 }
 
-func NewTransaction(accountFrom *Account, amount float64, pixKeyTo *pixKey, description string) (*Transaction, error) {
+func NewTransaction(accountFrom *Account, amount float64, pixKeyTo *PixKey, description string) (*Transaction, error) {
 	transaction := Transaction{
 		AccountFrom: accountFrom,
-		Amount: amount,
-		PixKeyTo: pixKeyTo,
-		Status: TransactionPending,
-		Description: description
+		Amount:      amount,
+		PixKeyTo:    pixKeyTo,
+		Status:      TransactionPending,
+		Description: description,
 	}
 
 	transaction.ID = uuid.NewV4().String()
