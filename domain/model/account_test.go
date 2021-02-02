@@ -3,7 +3,7 @@ package model_test
 import (
 	"testing"
 
-	"github.com/maiconloure/codepix/tree/main/domain/model"
+	"github.com/maiconloure/codepix/domain/model"
 	uuid "github.com/satori/go.uuid"
 	"github.com/stretchr/testify/require"
 )
