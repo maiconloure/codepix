@@ -3,9 +3,8 @@ package model_test
 import (
 	"testing"
 
-	uuid "github.com/satori/go.uuid"
-
 	"github.com/maiconloure/codepix/domain/model"
+	uuid "github.com/satori/go.uuid"
 	"github.com/stretchr/testify/require"
 )
 
@@ -15,11 +14,11 @@ func TestNewTransaction(t *testing.T) {
 	bank, _ := model.NewBank(code, name)
 
 	accountNumber := "abcnumber"
-	ownerName := "Wesley"
+	ownerName := "Ismael"
 	account, _ := model.NewAccount(bank, accountNumber, ownerName)
 
 	accountNumberDestination := "abcdestination"
-	ownerName = "Mariana"
+	ownerName = "Iani"
 	accountDestination, _ := model.NewAccount(bank, accountNumberDestination, ownerName)
 
 	kind := "email"
@@ -55,11 +54,11 @@ func TestModel_ChangeStatusOfATransaction(t *testing.T) {
 	bank, _ := model.NewBank(code, name)
 
 	accountNumber := "abcnumber"
-	ownerName := "Wesley"
+	ownerName := "Ismael"
 	account, _ := model.NewAccount(bank, accountNumber, ownerName)
 
 	accountNumberDestination := "abcdestination"
-	ownerName = "Mariana"
+	ownerName = "Iani"
 	accountDestination, _ := model.NewAccount(bank, accountNumberDestination, ownerName)
 
 	kind := "email"

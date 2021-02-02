@@ -16,6 +16,10 @@ type PixKeyRepositoryInterface interface {
 	FindAccount(id string) (*Account, error)
 }
 
+func init() {
+	govalidator.SetFieldsRequiredByDefault(true)
+}
+
 type PixKey struct {
 	Base      `valid:"required"`
 	Kind      string   `json:"kind" valid:"notnull"`
@@ -44,10 +48,11 @@ func (pixKey *PixKey) isValid() error {
 
 func NewPixKey(kind string, account *Account, key string) (*PixKey, error) {
 	pixKey := PixKey{
-		Kind:    kind,
-		Key:     key,
-		Account: account,
-		Status:  "active",
+		Kind:      kind,
+		Key:       key,
+		Account:   account,
+		AccountID: account.ID,
+		Status:    "active",
 	}
 	pixKey.ID = uuid.NewV4().String()
 	pixKey.CreatedAt = time.Now()

@@ -3,6 +3,8 @@ version: "3"
 services:
   app:
     build: .
+    ports:
+      - "5555:50051"
     volumes:
       - .:/go/src/
 
