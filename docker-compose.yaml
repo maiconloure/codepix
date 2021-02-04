@@ -3,8 +3,8 @@ version: "3"
 services:
   app:
     build: .
-    ports:
-      - "5555:50051"
+    # ports:
+    #   - "5555:50051"
     volumes:
       - .:/go/src/
 
@@ -38,7 +38,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_LISTENERS: INTERNAL://:9092,OUTSIDE://:9094
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,OUTSIDE://host.docker.internal:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,OUTSIDE://kafka:9094
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
     extra_hosts:
       - "host.docker.internal:172.17.0.1"
@@ -49,13 +49,11 @@ services:
       - kafka
     command: >
       bash -c
-      "sleep 5s &&
-      kafka-topics --create --topic=transactions --if-not-exists --bootstrap-server=kafka:9092 &&
-      kafka-topics --create --topic=transaction-confirmation --if-not-exists --bootstrap-server=kafka:9092 &&
-      kafka-topics --create --topic=bank001 --if-not-exists --bootstrap-server=kafka:9092 &&
-      kafka-topics --create --topic=bank002 --if-not-exists --bootstrap-server=kafka:9092"
-    extra_hosts:
-      - "host.docker.internal:172.17.0.1"
+        "sleep 5s &&
+        kafka-topics --create --topic=transactions --if-not-exists --bootstrap-server=kafka:9092 &&
+        kafka-topics --create --topic=transaction_confirmation --if-not-exists --bootstrap-server=kafka:9092 &&
+        kafka-topics --create --topic=bank001 --if-not-exists --bootstrap-server=kafka:9092 &&
+        kafka-topics --create --topic=bank002 --if-not-exists --bootstrap-server=kafka:9092"
 
   control-center:
     image: confluentinc/cp-enterprise-control-center:6.0.1
